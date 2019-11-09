@@ -3,11 +3,9 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
-      "expressjs-json-rpc": ["./expressjs/src/main/ts"],
-      "nestjs-json-rpc": ["./nestjs/src/main/ts"],
-      "@qiwi/json-rpc": ["./facade/src/main/ts"],
-      "@qiwi/json-rpc-common": ["./common/src/main/ts"],
-      "@qiwi/json-rpc-open-rpc": ["./open-rpc/src/main/ts"]
+      "nestjs-ldap-auth": ["./nestjs/src/main/ts"],
+      "@qiwi/ldap": ["./facade/src/main/ts"],
+      "@qiwi/ldap-common": ["./common/src/main/ts"]
     }
   }
 }
