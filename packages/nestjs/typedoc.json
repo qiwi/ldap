@@ -1,5 +1,5 @@
 {
-  "name": "expressjs-json-rpc",
+  "name": "nestjs-ldap-auth",
   "mode": "modules",
   "out": "./docs",
   "target": "ES6",
