@@ -21,17 +21,6 @@
     "release": "multi-semantic-release --execasync"
   },
   "dependencies": {
-    "@qiwi/uniconfig": "^2.21.0",
-    "@qiwi/uniconfig-core": "^2.19.0",
-    "@qiwi/uniconfig-plugin-ajv": "^2.19.0",
-    "@qiwi/uniconfig-plugin-api-file": "^2.1.1",
-    "@qiwi/uniconfig-plugin-api-http": "^2.13.0",
-    "@qiwi/uniconfig-plugin-datatree": "^2.16.0",
-    "@qiwi/uniconfig-plugin-dot": "^2.6.0",
-    "@qiwi/uniconfig-plugin-env": "^2.11.0",
-    "@qiwi/uniconfig-plugin-ip": "^2.8.0",
-    "@qiwi/uniconfig-plugin-path": "^2.20.0",
-    "@qiwi/uniconfig-plugin-pkg": "^2.9.0",
     "activedirectory": "^0.7.2",
     "ldap-escape": "^2.0.3"
   },
