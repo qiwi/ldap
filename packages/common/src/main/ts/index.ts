@@ -12,13 +12,14 @@ interface ILdapConfig {
   userPostfix: string
 }
 
-interface ISessionProvider {
-  login: (username: string, password: string) => IToken,
-  logout: (token: IToken) => void,
-  getSelfProfile: (token: IToken) => { roles: string[] }
-}
-
 type IToken = string
+
+interface ISessionProvider {
+  generateToken: ({ttl, data}: {ttl: number, data: any}) => IToken
+  refreshToken: (token: IToken) => IToken,
+  revokeToken: (token: IToken) => boolean,
+  appendData: ({token: data}: { token: IToken, data: any }) => IToken
+}
 
 export const ldapClientFactory = (
   ldapConfig: ILdapConfig,
@@ -43,27 +44,25 @@ export const ldapClientFactory = (
     })
   }
 
-  async function login(username: string, password: string) {
+  async function login(username: string, password: string, ttl: number) {
     const isLoginSuccessful = await checkCred(username, password)
     if (!isLoginSuccessful) {
       return 'cannot login'
     }
 
-    return sessionProvider.login(username, password)
+    return sessionProvider.generateToken({
+      ttl,
+      data: {username, password},
+    })
   }
 
   function logout(token: IToken) {
-    return sessionProvider.logout(token)
-  }
-
-  function getSelfProfile(token: IToken) {
-    return sessionProvider.getSelfProfile(token)
+    return sessionProvider.revokeToken(token)
   }
 
   return {
     checkCred,
     login,
     logout,
-    getSelfProfile,
   }
 }
