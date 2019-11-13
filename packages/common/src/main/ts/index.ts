@@ -15,17 +15,35 @@ interface ILdapConfig {
 type IToken = string
 
 interface ISessionProvider {
-  generateToken: ({ttl, data}: {ttl: number, data: any}) => IToken
+  generateToken: ({ttl, userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) => IToken
   refreshToken: (token: IToken) => IToken,
   revokeToken: (token: IToken) => boolean,
-  appendData: ({token: data}: { token: IToken, data: any }) => IToken
+  appendData: ({token, data}: { token: IToken, data: any }) => IToken
+  getDataByToken: (token: IToken) => any
 }
 
 export const ldapClientFactory = (
   ldapConfig: ILdapConfig,
   sessionProvider: ISessionProvider,
+  AD?: any,
 ) => {
-  const ad = new ActiveDirectory(ldapConfig.instanceConfig)
+  const ad = AD || new ActiveDirectory(ldapConfig.instanceConfig)
+
+  function findUser(username: string) {
+    return new Promise((resolve => {
+      ad.findUser(username, (_: any, res: any) => {
+        resolve(res)
+      })
+    }))
+  }
+
+  function findGroupByUser(username: string): any {
+    return new Promise((resolve => {
+      ad.getGroupMembershipForUser(username, (_: any, res: any) => {
+        resolve(res)
+      })
+    }))
+  }
 
   function checkCred(login: string, password: string) {
     const fullUserName = login + ldapConfig.userPostfix
@@ -46,23 +64,35 @@ export const ldapClientFactory = (
 
   async function login(username: string, password: string, ttl: number) {
     const isLoginSuccessful = await checkCred(username, password)
+
     if (!isLoginSuccessful) {
       return 'cannot login'
     }
 
+    const userGroups = await findGroupByUser(username)
     return sessionProvider.generateToken({
       ttl,
-      data: {username, password},
+      userData: {username, password},
+      ldapData: userGroups,
     })
   }
 
   function logout(token: IToken) {
-    return sessionProvider.revokeToken(token)
+    return new Promise(resolve => {
+      resolve(sessionProvider.revokeToken(token))
+    })
+  }
+
+  function getDataByToken(token: IToken): any {
+    return sessionProvider.getDataByToken(token)
   }
 
   return {
+    findGroupByUser,
+    findUser,
     checkCred,
     login,
     logout,
+    getDataByToken,
   }
 }
