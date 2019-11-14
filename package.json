@@ -20,10 +20,6 @@
     "postupdate": "yarn && yarn bootstrap && yarn build && yarn test",
     "release": "multi-semantic-release --execasync"
   },
-  "dependencies": {
-    "activedirectory": "^0.7.2",
-    "ldap-escape": "^2.0.3"
-  },
   "devDependencies": {
     "@qiwi/multi-semantic-release": "^1.2.0",
     "@semantic-release/changelog": "^3.0.5",

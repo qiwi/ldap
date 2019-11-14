@@ -2,14 +2,16 @@
 import ActiveDirectory from 'activedirectory'
 
 interface ILdapConfig {
-  instanceConfig: {
-    url: string,
-    baseDN: string,
-    tlsOptions?: {
-      rejectUnauthorized: boolean
-    }
-  }
+  instanceConfig: IInstanceLdapConfig
   userPostfix: string
+}
+
+interface IInstanceLdapConfig {
+  url: string,
+  baseDN: string,
+  tlsOptions?: {
+    rejectUnauthorized: boolean
+  }
 }
 
 type IToken = string
@@ -22,16 +24,27 @@ interface ISessionProvider {
   getDataByToken: (token: IToken) => any
 }
 
-export const ldapClientFactory = (
+interface ILdapProvider {
+  findUser: (username: string, cb: (err: any, res: any) => any) => void
+  getGroupMembershipForUser: (username: string, cb: (err: any, res: any) => any) => void
+  authenticate: (fullUserName: string, password: string, cb: (err: any, res: any) => any) => void
+}
+
+// const ad = new ldapProvider(ldapConfig.instanceConfig) => и передавай инстанс
+
+export const ldapClientFactory = ({
+  ldapConfig,
+  ldapProvider,
+  sessionProvider,
+}: {
   ldapConfig: ILdapConfig,
-  sessionProvider: ISessionProvider,
-  AD?: any,
-) => {
-  const ad = AD || new ActiveDirectory(ldapConfig.instanceConfig)
+  ldapProvider: ILdapProvider
+  sessionProvider: ISessionProvider
+}) => {
 
   function findUser(username: string) {
     return new Promise((resolve => {
-      ad.findUser(username, (_: any, res: any) => {
+      ldapProvider.findUser(username, (_: any, res: any) => {
         resolve(res)
       })
     }))
@@ -39,7 +52,7 @@ export const ldapClientFactory = (
 
   function findGroupByUser(username: string): any {
     return new Promise((resolve => {
-      ad.getGroupMembershipForUser(username, (_: any, res: any) => {
+      ldapProvider.getGroupMembershipForUser(username, (_: any, res: any) => {
         resolve(res)
       })
     }))
@@ -48,7 +61,7 @@ export const ldapClientFactory = (
   function checkCred(login: string, password: string) {
     const fullUserName = login + ldapConfig.userPostfix
     return new Promise(resolve => {
-      ad.authenticate(fullUserName, password, (err: any, result: any) => {
+      ldapProvider.authenticate(fullUserName, password, (err: any, result: any) => {
         if (err) {
           resolve({reasonText: err})
         }

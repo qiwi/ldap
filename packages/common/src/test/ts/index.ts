@@ -56,14 +56,12 @@ describe('@qiwi/ldap-common', () => {
       }
 
       function revokeToken(token: string) {
-        console.log('1revokeToken - inMemoryStorage', inMemoryStorage)
 
         if (!inMemoryStorage[token]) {
           return false
         }
 
         delete inMemoryStorage[token]
-        console.log('revokeToken - inMemoryStorage', inMemoryStorage)
         return true
       }
 
@@ -106,7 +104,11 @@ describe('@qiwi/ldap-common', () => {
       authenticate: (_: string, __: string, cb: (_: null, res: boolean) => void) => cb(null, true),
     }
 
-    const ldapClient = ldapClientFactory(activeDirectoryConfig, testSessionProvider, testADProvider)
+    const ldapClient = ldapClientFactory({
+      sessionProvider: testSessionProvider,
+      ldapConfig: activeDirectoryConfig,
+      ldapProvider: testADProvider,
+    })
 
     it('checkCred', () => {
       ldapClient.checkCred('foo', 'bar')
@@ -158,7 +160,6 @@ describe('@qiwi/ldap-common', () => {
       await ldapClient.logout(token)
       const deleteLdapData = await ldapClient.getDataByToken('foobartoken')
       expect(deleteLdapData).toEqual('invalid token')
-
     })
   })
 })

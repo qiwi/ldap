@@ -1,10 +1,10 @@
-import {ldapClientFactory, baz} from '../../main/ts'
+import {ldapClientFactory, HasLdapGroup} from '../../main/ts'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
     it('properly exposes its inners', () => {
       expect(ldapClientFactory).not.toBeUndefined()
-      expect(baz).toBe('qux')
+      expect(HasLdapGroup).not.toBeUndefined()
     })
   })
 })
