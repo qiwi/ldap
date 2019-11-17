@@ -83,7 +83,8 @@
     "reqresnext": "^1.6.2",
     "supertest": "^4.0.2",
     "@nestjs/testing": "^6.9.0",
-    "@types/supertest": "^2.0.8"
+    "@types/supertest": "^2.0.8",
+    "@nestjs/platform-express": "^6.9.0"
   },
   "repository": {
     "type": "git",

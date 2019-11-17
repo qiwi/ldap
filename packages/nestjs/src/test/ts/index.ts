@@ -1,8 +1,9 @@
-import {LdapGuard} from '../../main/ts'
+import {LdapGuard, LdapRoles, LDAP_PROVIDER} from '../../main/ts'
 import {Test, TestingModule} from '@nestjs/testing'
 import {NestApplication} from '@nestjs/core'
-import {Controller, Get, UseGuards, SetMetadata} from '@nestjs/common'
+import {Controller, Get, HttpStatus, UseGuards} from '@nestjs/common'
 import request from 'supertest'
+import {ldapClient} from '../../main/ts/testLdap'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
@@ -17,11 +18,12 @@ describe('@qiwi/ldap-common', () => {
     let app: NestApplication
 
     @Controller('cats')
+
     @UseGuards(LdapGuard)
     class CustomController {
 
       @Get()
-      @SetMetadata('roles', ['admin'])
+      @LdapRoles('admin', 'user')
       findAll(): string {
         return 'This action returns all cats'
       }
@@ -30,15 +32,14 @@ describe('@qiwi/ldap-common', () => {
 
     beforeAll(async() => {
       module = await Test.createTestingModule({
-        providers: [],
+        providers: [{
+          provide: LDAP_PROVIDER,
+          useValue: new LdapGuard(ldapClient),
+        }],
         controllers: [CustomController],
       }).compile()
       app = module.createNestApplication()
-      // app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
-
       await app.init()
-
-      controller = module.get(CustomController)
     })
 
     describe('CatsController', () => {
@@ -46,6 +47,7 @@ describe('@qiwi/ldap-common', () => {
         it('should return an array of cats', async() => {
           return request(app.getHttpServer())
             .get('/cats')
+            .expect(HttpStatus.FORBIDDEN)
 
         })
       })

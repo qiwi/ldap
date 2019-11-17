@@ -1,12 +1,12 @@
 // @ts-ignore
 import ActiveDirectory from 'activedirectory'
 
-interface ILdapConfig {
+export interface ILdapConfig {
   instanceConfig: IInstanceLdapConfig
   userPostfix: string
 }
 
-interface IInstanceLdapConfig {
+export interface IInstanceLdapConfig {
   url: string,
   baseDN: string,
   tlsOptions?: {
@@ -14,9 +14,9 @@ interface IInstanceLdapConfig {
   }
 }
 
-type IToken = string
+export type IToken = string
 
-interface ISessionProvider {
+export interface ISessionProvider {
   generateToken: ({ttl, userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) => IToken
   refreshToken: (token: IToken) => IToken,
   revokeToken: (token: IToken) => boolean,
@@ -24,31 +24,30 @@ interface ISessionProvider {
   getDataByToken: (token: IToken) => any
 }
 
-interface ILdapProvider {
+export interface ILdapService {
   findUser: (username: string, cb: (err: any, res: any) => any) => void
   getGroupMembershipForUser: (username: string, cb: (err: any, res: any) => any) => void
   authenticate: (fullUserName: string, password: string, cb: (err: any, res: any) => any) => void
 }
 
+export interface ILdapProviderFactory {
+  ldapConfig: ILdapConfig,
+  ldapProvider: ILdapService
+  sessionProvider: ISessionProvider
+}
 // const ad = new ldapProvider(ldapConfig.instanceConfig) => и передавай инстанс
+
+export interface ILdapProvider {
+  login: (login: string, password: string, ttl: number) => Promise<any>
+  logout: (token: IToken) => Promise<any>,
+  getDataByToken: (token: IToken) => Promise<any>,
+}
 
 export const ldapClientFactory = ({
   ldapConfig,
   ldapProvider,
   sessionProvider,
-}: {
-  ldapConfig: ILdapConfig,
-  ldapProvider: ILdapProvider
-  sessionProvider: ISessionProvider
-}) => {
-
-  function findUser(username: string) {
-    return new Promise((resolve => {
-      ldapProvider.findUser(username, (_: any, res: any) => {
-        resolve(res)
-      })
-    }))
-  }
+}: ILdapProviderFactory): ILdapProvider => {
 
   function findGroupByUser(username: string): any {
     return new Promise((resolve => {
@@ -97,13 +96,12 @@ export const ldapClientFactory = ({
   }
 
   function getDataByToken(token: IToken): any {
-    return sessionProvider.getDataByToken(token)
+    return new Promise(resolve =>
+      resolve(sessionProvider.getDataByToken(token)),
+    )
   }
 
   return {
-    findGroupByUser,
-    findUser,
-    checkCred,
     login,
     logout,
     getDataByToken,
