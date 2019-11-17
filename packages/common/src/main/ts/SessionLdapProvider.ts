@@ -1,34 +1,81 @@
 import {ILdapProvider, ILdapService, ISessionProvider, IToken} from './interfaces'
 
 export class SessionLdapProvider implements ILdapProvider{
+
   constructor(
     private readonly ldapService: ILdapService,
     private readonly sessionProvider: ISessionProvider,
+    private readonly userPostfix: string,
   ) {}
 
-  login(username: string, password: string) {}
-  logout(token: IToken) {}
-  getDataByToken(token: IToken) {}
+  checkCred(login: string, password: string) {
+    const fullUserName = login + this.userPostfix
+    return new Promise(resolve => {
+      this.ldapService.authenticate(fullUserName, password, (err: any, result: any) => {
+        if (err) {
+          resolve({reasonText: err})
+        }
+
+        if (!result) {
+          resolve({reasonText: 'Unauthenticated'})
+        }
+
+        return resolve({login, result})
+      })
+    })
+  }
+
+  findGroupByUser(username: string): any {
+    return new Promise((resolve => {
+      this.ldapService.getGroupMembershipForUser(username, (_: any, res: any) => {
+        resolve(res)
+      })
+    }))
+  }
+
+  async login(username: string, password: string, ttl: number) {
+    const isLoginSuccessful = await this.checkCred(username, password)
+
+    if (!isLoginSuccessful) {
+      return 'cannot login'
+    }
+
+    const userGroups = await this.findGroupByUser(username)
+    return this.sessionProvider.generateToken({
+      ttl,
+      userData: {username, password},
+      ldapData: userGroups,
+    })
+  }
+
+  async logout(token: IToken) {
+    return this.sessionProvider.revokeToken(token)
+  }
+
+  async getDataByToken(token: IToken) {
+    return this.sessionProvider.getDataByToken(token)
+  }
+
 }
-
-export class KeycloakLdapProvider implements ILdapProvider{
-  constructor(
-    private readonly ldapService: ILdapService,
-    private readonly sessionProvider: ISessionProvider,
-  ) {}
-
-  login(username: string, password: string) {}
-  logout(token: IToken) {}
-  getDataByToken(token: IToken) {}
-}
-
-export class CommonAuthLdapProvider implements ILdapProvider{
-  constructor(
-    private readonly ldapService: ILdapService,
-    private readonly sessionProvider: ISessionProvider,
-  ) {}
-
-  login(username: string, password: string) {}
-  logout(token: IToken) {}
-  getDataByToken(token: IToken) {}
-}
+//
+// export class KeycloakLdapProvider implements ILdapProvider{
+//   constructor(
+//     private readonly ldapService: ILdapService,
+//     private readonly keycloakService: any,
+//   ) {}
+//
+//   login(username: string, password: string) {}
+//   logout(token: IToken) {}
+//   getDataByToken(token: IToken) {}
+// }
+//
+// export class CommonAuthLdapProvider implements ILdapProvider{
+//   constructor(
+//     private readonly ldapService: ILdapService,
+//     private readonly commonAuthProvider: any,
+//   ) {}
+//
+//   login(username: string, password: string) {}
+//   logout(token: IToken) {}
+//   getDataByToken(token: IToken) {}
+// }

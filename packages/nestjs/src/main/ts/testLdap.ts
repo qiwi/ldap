@@ -1,4 +1,4 @@
-import {ldapClientFactory} from '@qiwi/ldap-common'
+import {ldapClientFactory, ISessionProvider} from '@qiwi/ldap-common'
 
 export const activeDirectoryConfig = {
   'instanceConfig': {
@@ -14,16 +14,6 @@ export const activeDirectoryConfig = {
   'userPostfix': '@hq.test.com',
 }
 
-export type IToken = string
-
-export interface ISessionProvider {
-  generateToken: ({ttl, userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) => IToken
-  refreshToken: (token: IToken) => IToken,
-  revokeToken: (token: IToken) => boolean,
-  appendData: ({token, data}: { token: IToken, data: any }) => IToken
-  getDataByToken: (token: IToken) => any
-}
-
 export const testSessionProviderFactory = (): ISessionProvider => {
   const inMemoryStorage: {
     [key: string]: any
@@ -32,46 +22,46 @@ export const testSessionProviderFactory = (): ISessionProvider => {
   function generateToken({userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) {
     const token = userData.username + userData.password + 'token'
     inMemoryStorage[token] = {ldapData, ttl: 100}
-    return token
+    return Promise.resolve(token)
   }
 
   function refreshToken(token: string) {
     if (!inMemoryStorage[token]) {
-      return 'invalid token'
+      return Promise.reject('invalid token')
     }
 
     const {ldapData} = inMemoryStorage[token]
     inMemoryStorage[token] = undefined
     const newToken = token + 'token'
     inMemoryStorage[newToken] = {ldapData, ttl: 200}
-    return token
+    return Promise.resolve(token)
   }
 
   function revokeToken(token: string) {
 
     if (!inMemoryStorage[token]) {
-      return false
+      return Promise.resolve(false)
     }
 
     delete inMemoryStorage[token]
-    return true
+    return Promise.resolve(true)
   }
 
   function appendData({token, data}: {token: string, data: {[key: string]: any}}) {
     if (!inMemoryStorage[token]) {
-      return 'invalid token'
+      return Promise.resolve(false)
     }
     inMemoryStorage[token] = {
       ...inMemoryStorage[token],
       ...data,
     }
 
-    return token
+    return Promise.resolve(true)
   }
 
   function getDataByToken(token: string) {
     if (!inMemoryStorage[token]) {
-      return 'invalid token'
+      return []
     }
 
     return inMemoryStorage[token]

@@ -1,6 +1,7 @@
 // @ts-ignore
 import ActiveDirectory from 'activedirectory'
-
+import {ISessionProvider, ILdapService, IToken, ILdapProvider} from './interfaces'
+import {SessionLdapProvider} from './SessionLdapProvider'
 export interface ILdapConfig {
   instanceConfig: IInstanceLdapConfig
   userPostfix: string
@@ -14,22 +15,6 @@ export interface IInstanceLdapConfig {
   }
 }
 
-export type IToken = string
-
-export interface ISessionProvider {
-  generateToken: ({ttl, userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) => IToken
-  refreshToken: (token: IToken) => IToken,
-  revokeToken: (token: IToken) => boolean,
-  appendData: ({token, data}: { token: IToken, data: any }) => IToken
-  getDataByToken: (token: IToken) => any
-}
-
-export interface ILdapService {
-  findUser: (username: string, cb: (err: any, res: any) => any) => void
-  getGroupMembershipForUser: (username: string, cb: (err: any, res: any) => any) => void
-  authenticate: (fullUserName: string, password: string, cb: (err: any, res: any) => any) => void
-}
-
 export interface ILdapProviderFactory {
   ldapConfig: ILdapConfig,
   ldapProvider: ILdapService
@@ -37,13 +22,7 @@ export interface ILdapProviderFactory {
 }
 // const ad = new ldapProvider(ldapConfig.instanceConfig) => и передавай инстанс
 
-export interface ILdapProvider {
-  login: (login: string, password: string, ttl: number) => Promise<any>
-  logout: (token: IToken) => Promise<any>,
-  getDataByToken: (token: IToken) => Promise<any>,
-}
-
-export const ldapClientFactory = ({
+const ldapClientFactory = ({
   ldapConfig,
   ldapProvider,
   sessionProvider,
@@ -89,13 +68,13 @@ export const ldapClientFactory = ({
     })
   }
 
-  function logout(token: IToken) {
+  function logout(token: IToken): Promise<boolean> {
     return new Promise(resolve => {
       resolve(sessionProvider.revokeToken(token))
     })
   }
 
-  function getDataByToken(token: IToken): any {
+  function getDataByToken(token: IToken): Promise<any> {
     return new Promise(resolve =>
       resolve(sessionProvider.getDataByToken(token)),
     )
@@ -106,4 +85,13 @@ export const ldapClientFactory = ({
     logout,
     getDataByToken,
   }
+}
+
+export {
+  ISessionProvider,
+  ILdapService,
+  IToken,
+  ILdapProvider,
+  ldapClientFactory,
+  SessionLdapProvider,
 }

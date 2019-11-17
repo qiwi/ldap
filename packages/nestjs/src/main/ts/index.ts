@@ -1,6 +1,7 @@
 import {Injectable, Inject, CanActivate, ExecutionContext, SetMetadata} from '@nestjs/common'
 import {ILdapProvider} from '@qiwi/ldap-common'
 import {Reflector} from '@nestjs/core'
+export const LDAP_PROVIDER = Symbol('ldap provider IoC ref')
 
 @Injectable()
 export class LdapGuard implements CanActivate {
@@ -12,17 +13,17 @@ export class LdapGuard implements CanActivate {
     this.reflector = new Reflector()
   }
 
-  canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler())
-    return !roles
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const req = context
+      .switchToHttp()
+      .getRequest()
 
-    // const request = context.switchToHttp().getRequest()
-    // const user = request.user
-    // const hasRole = () => user.roles.some((role: string) => roles.includes(role))
-    // return user && user.roles && hasRole()
+    const token = req.get('Authorization')
+    const userRoles = await this.ldapProvider.getDataByToken(token)
+    const roles = this.reflector.get<string[]>('roles', context.getHandler())
+    return userRoles.some((el: string) => roles.includes(el))
   }
 
 }
 
-export const LDAP_PROVIDER = Symbol('ldap provider IoC ref')
 export const LdapRoles = (...roles: string[]) => SetMetadata('roles', roles)

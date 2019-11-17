@@ -1,9 +1,10 @@
-import {LdapGuard, LdapRoles, LDAP_PROVIDER} from '../../main/ts'
-import {Test, TestingModule} from '@nestjs/testing'
 import {NestApplication} from '@nestjs/core'
 import {Controller, Get, HttpStatus, UseGuards} from '@nestjs/common'
+import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
-import {ldapClient} from '../../main/ts/testLdap'
+import {SessionLdapProvider} from '@qiwi/ldap-common'
+import {LdapGuard, LdapRoles, LDAP_PROVIDER} from '../../main/ts'
+import {testADProvider, testSessionProvider} from '../../main/ts/testLdap'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
@@ -14,11 +15,15 @@ describe('@qiwi/ldap-common', () => {
 
   describe('guard works correctly', () => {
     let module: TestingModule
-    // let controller: CustomController
     let app: NestApplication
 
-    @Controller('cats')
+    const ldapProvider = new SessionLdapProvider(
+      testADProvider,
+      testSessionProvider,
+      'test',
+    )
 
+    @Controller('cats')
     @UseGuards(LdapGuard)
     class CustomController {
 
@@ -31,10 +36,11 @@ describe('@qiwi/ldap-common', () => {
     }
 
     beforeAll(async() => {
+      console.log('ldapProvider-', ldapProvider)
       module = await Test.createTestingModule({
         providers: [{
           provide: LDAP_PROVIDER,
-          useValue: new LdapGuard(ldapClient),
+          useValue: ldapProvider,
         }],
         controllers: [CustomController],
       }).compile()

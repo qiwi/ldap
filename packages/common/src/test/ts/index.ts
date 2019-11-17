@@ -1,4 +1,5 @@
-import {ldapClientFactory} from '../../main/ts'
+import {ldapClientFactory, SessionLdapProvider} from '../../main/ts'
+import {ISessionProvider} from '../../../target/es5'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
@@ -8,30 +9,6 @@ describe('@qiwi/ldap-common', () => {
   })
 
   describe('methods works correctly', () => {
-    const activeDirectoryConfig = {
-      'instanceConfig': {
-        url: 'ldaps://hq.test.com/',
-        baseDN: 'DC=test',
-        username: 'user',
-        password: 'pass',
-        tlsOptions: {
-          rejectUnauthorized: false,
-        },
-      },
-      'groups': [],
-      'userPostfix': '@hq.test.com',
-    }
-
-    type IToken = string
-
-    interface ISessionProvider {
-      generateToken: ({ttl, userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) => IToken
-      refreshToken: (token: IToken) => IToken,
-      revokeToken: (token: IToken) => boolean,
-      appendData: ({token, data}: { token: IToken, data: any }) => IToken
-      getDataByToken: (token: IToken) => any
-    }
-
     const testSessionProviderFactory = (): ISessionProvider => {
       const inMemoryStorage: {
         [key: string]: any
@@ -40,41 +17,40 @@ describe('@qiwi/ldap-common', () => {
       function generateToken({userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) {
         const token = userData.username + userData.password + 'token'
         inMemoryStorage[token] = {ldapData, ttl: 100}
-        return token
+        return Promise.resolve(token)
       }
 
       function refreshToken(token: string) {
         if (!inMemoryStorage[token]) {
-          return 'invalid token'
+          return Promise.reject('invalid token')
         }
 
         const {ldapData} = inMemoryStorage[token]
         inMemoryStorage[token] = undefined
         const newToken = token + 'token'
         inMemoryStorage[newToken] = {ldapData, ttl: 200}
-        return token
+        return Promise.resolve(token)
       }
 
       function revokeToken(token: string) {
-
         if (!inMemoryStorage[token]) {
-          return false
+          return Promise.resolve(false)
         }
 
         delete inMemoryStorage[token]
-        return true
+        return Promise.resolve(true)
       }
 
       function appendData({token, data}: {token: string, data: {[key: string]: any}}) {
         if (!inMemoryStorage[token]) {
-          return 'invalid token'
+          return Promise.resolve(false)
         }
         inMemoryStorage[token] = {
           ...inMemoryStorage[token],
           ...data,
         }
 
-        return token
+        return Promise.resolve(true)
       }
 
       function getDataByToken(token: string) {
@@ -93,7 +69,6 @@ describe('@qiwi/ldap-common', () => {
         getDataByToken,
       }
     }
-
     const testSessionProvider = testSessionProviderFactory()
 
     const testADProvider = {
@@ -104,14 +79,14 @@ describe('@qiwi/ldap-common', () => {
       authenticate: (_: string, __: string, cb: (_: null, res: boolean) => void) => cb(null, true),
     }
 
-    const ldapClient = ldapClientFactory({
-      sessionProvider: testSessionProvider,
-      ldapConfig: activeDirectoryConfig,
-      ldapProvider: testADProvider,
-    })
+    const ldapProvider = new SessionLdapProvider(
+      testADProvider,
+      testSessionProvider,
+      'test',
+    )
 
     it('checkCred', () => {
-      ldapClient.checkCred('foo', 'bar')
+      ldapProvider.checkCred('foo', 'bar')
         .then(res => {
           expect(res).toMatchObject({login: 'foo', result: true})
         })
@@ -119,33 +94,28 @@ describe('@qiwi/ldap-common', () => {
     })
 
     it('login', () => {
-      ldapClient.login('foo', 'bar', 0)
+      ldapProvider.login('foo', 'bar', 0)
         .then(res => {
           expect(res).toEqual('foobartoken')
-          expect(ldapClient.getDataByToken(res)).toMatchObject({ldapData: 'foo groups', ttl: 100})
+          expect(ldapProvider.getDataByToken(res)).toMatchObject({ldapData: 'foo groups', ttl: 100})
         })
         .catch(console.log)
     })
 
     it('logout', () => {
-      ldapClient.logout('foo')
+      ldapProvider
+        .login('foo', 'bar', 0)
+        .catch(console.log)
+      ldapProvider.logout('foobartoken')
         .then((res) => {
           expect(res).toEqual(true)
-          expect(ldapClient.getDataByToken('foobartoken')).toEqual(undefined)
-        })
-        .catch(console.log)
-    })
-
-    it('findUser', () => {
-      ldapClient.findUser('foo')
-        .then((res) => {
-          expect(res).toEqual('foo found')
+          expect(ldapProvider.getDataByToken('foobartoken')).toEqual('invalid token')
         })
         .catch(console.log)
     })
 
     it('findGroupByUser', () => {
-      ldapClient.findGroupByUser('foo')
+      ldapProvider.findGroupByUser('foo')
         .then((res: any) => {
           expect(res).toEqual('foo groups')
         })
@@ -153,12 +123,12 @@ describe('@qiwi/ldap-common', () => {
     })
 
     it('getDataByToken', async() => {
-      const token = await ldapClient.login('foo', 'bar', 100)
+      const token = await ldapProvider.login('foo', 'bar', 100)
       expect(token).toEqual('foobartoken')
-      const ldapData = await ldapClient.getDataByToken('foobartoken')
+      const ldapData = await ldapProvider.getDataByToken('foobartoken')
       expect(ldapData).toMatchObject({ldapData: 'foo groups', ttl: 100})
-      await ldapClient.logout(token)
-      const deleteLdapData = await ldapClient.getDataByToken('foobartoken')
+      await ldapProvider.logout(token)
+      const deleteLdapData = await ldapProvider.getDataByToken('foobartoken')
       expect(deleteLdapData).toEqual('invalid token')
     })
   })
