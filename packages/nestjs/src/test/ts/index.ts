@@ -4,7 +4,7 @@ import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
 import {SessionLdapProvider} from '@qiwi/ldap-common'
 import {LdapGuard, LdapRoles, LDAP_PROVIDER, UseLdapGuard} from '../../main/ts'
-import {testADProvider, testSessionProvider} from '../../test/stab/testLdap'
+import {testADProvider, testSessionProvider} from '../../test/stub/testLdap'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {

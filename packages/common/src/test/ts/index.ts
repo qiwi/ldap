@@ -73,7 +73,6 @@ describe('@qiwi/ldap-common', () => {
     const testADProvider = {
       findUser: (username: string, cb: (_: null, res: string) => void) => cb(null, username + ' found'),
       getGroupMembershipForUser: (username: string, cb: (_: any, res?: string) => void) => {
-        console.log('getGroupMembershipForUser', username)
         if (username === 'test') {
           return cb('invalid user')
         }
@@ -174,7 +173,6 @@ describe('@qiwi/ldap-common', () => {
         it('return test on invalid user', async() =>
           ldapProvider.findGroupByUser('test')
             .then((res: any) => {
-              console.log('find-findGroupByUser', res)
               expect(res).toEqual(false)
             })
             .catch(console.log),
