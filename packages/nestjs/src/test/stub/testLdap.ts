@@ -4,7 +4,8 @@ export const testSessionProviderFactory = (): ISessionProvider => {
   const inMemoryStorage: {
     [key: string]: any
   } = {
-    'token1': ['User'],
+    'tokenUser': ['User'],
+    'tokenAdmin': ['Admin'],
   }
 
   function generateToken({userData, ldapData}: {ttl?: number, userData: {username: string, password: string}, ldapData: string}) {

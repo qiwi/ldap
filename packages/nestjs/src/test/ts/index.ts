@@ -23,26 +23,20 @@ describe('@qiwi/ldap-common', () => {
       'test',
     )
 
-    @Controller('cats')
+    @Controller('/')
     @UseLdapGuard()
     class CustomController {
 
-      @Get()
-      @LdapRoles('Admin', 'User')
-      findAll(): string {
-        return 'This action returns all cats'
+      @Get('/private')
+      @LdapRoles('Admin')
+      getSmthPrivate(): Array<string> {
+        return ['foo', 'bar']
       }
 
-    }
-
-    @Controller('forbidden')
-    @UseLdapGuard()
-    class ForbiddenController {
-
-      @Get()
-      @LdapRoles('Admin')
-      findAll(): string {
-        return 'This action returns all cats'
+      @Get('/public')
+      @LdapRoles('User', 'Admin')
+      getSmthPublic(): Array<string> {
+        return ['baz', 'qux']
       }
 
     }
@@ -53,24 +47,34 @@ describe('@qiwi/ldap-common', () => {
           provide: LDAP_PROVIDER,
           useValue: testLdapProvider,
         }],
-        controllers: [CustomController, ForbiddenController],
+        controllers: [CustomController],
       }).compile()
       app = module.createNestApplication()
       await app.init()
     })
 
     describe('LdapGuard', () => {
-      it('should return string correctly', async() => {
-        return request(app.getHttpServer())
-          .get('/cats')
-          .set({Authorization: 'token1'})
-          .expect('This action returns all cats')
+      it('Admin should have access to both endpoints', async() => {
+        await request(app.getHttpServer())
+          .get('/public')
+          .set({Authorization: 'tokenAdmin'})
+          .expect(['baz', 'qux'])
+
+        await request(app.getHttpServer())
+          .get('/private')
+          .set({Authorization: 'tokenAdmin'})
+          .expect(['foo', 'bar'])
       })
 
-      it('should return 403 status', async() => {
-        return request(app.getHttpServer())
-          .get('/forbidden')
-          .set({Authorization: 'token1'})
+      it('User should have access to public route only', async() => {
+        await request(app.getHttpServer())
+          .get('/public')
+          .set({Authorization: 'tokenUser'})
+          .expect(['baz', 'qux'])
+
+        await request(app.getHttpServer())
+          .get('/private')
+          .set({Authorization: 'tokenUser'})
           .expect(HttpStatus.FORBIDDEN)
 
       })
