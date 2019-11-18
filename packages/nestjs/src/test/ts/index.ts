@@ -1,5 +1,5 @@
 import {NestApplication} from '@nestjs/core'
-import {Controller, Get, HttpStatus, UseGuards} from '@nestjs/common'
+import {Controller, Get, UseGuards, HttpStatus} from '@nestjs/common'
 import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
 import {SessionLdapProvider} from '@qiwi/ldap-common'
@@ -28,7 +28,19 @@ describe('@qiwi/ldap-common', () => {
     class CustomController {
 
       @Get()
-      @LdapRoles('admin', 'user')
+      @LdapRoles('Admin', 'User')
+      findAll(): string {
+        return 'This action returns all cats'
+      }
+
+    }
+
+    @Controller('forbidden')
+    @UseGuards(LdapGuard)
+    class ForbiddenController {
+
+      @Get()
+      @LdapRoles('Admin')
       findAll(): string {
         return 'This action returns all cats'
       }
@@ -36,27 +48,34 @@ describe('@qiwi/ldap-common', () => {
     }
 
     beforeAll(async() => {
-      console.log('ldapProvider-', ldapProvider)
       module = await Test.createTestingModule({
         providers: [{
           provide: LDAP_PROVIDER,
           useValue: ldapProvider,
         }],
-        controllers: [CustomController],
+        controllers: [CustomController, ForbiddenController],
       }).compile()
       app = module.createNestApplication()
       await app.init()
     })
 
-    describe('CatsController', () => {
-      describe('findAll', () => {
-        it('should return an array of cats', async() => {
-          return request(app.getHttpServer())
-            .get('/cats')
-            .expect(HttpStatus.FORBIDDEN)
+    describe('LdapGuard', () => {
+      it('should return string correctly', async() => {
+        return request(app.getHttpServer())
+          .get('/cats')
+          .set({Authorization: 'token1'})
+          .expect('This action returns all cats')
 
-        })
       })
+
+      it('should return 403 status', async() => {
+        return request(app.getHttpServer())
+          .get('/forbidden')
+          .set({Authorization: 'token1'})
+          .expect(HttpStatus.FORBIDDEN)
+
+      })
+
     })
 
   })
