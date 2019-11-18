@@ -1,5 +1,4 @@
-import {SessionLdapProvider} from '../../main/ts'
-import {ISessionProvider} from '../../../target/es5'
+import {SessionLdapProvider, ISessionProvider} from '../../main/ts'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {

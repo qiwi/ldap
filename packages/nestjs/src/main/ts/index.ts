@@ -1,6 +1,7 @@
 import {Injectable, Inject, CanActivate, ExecutionContext, SetMetadata, UseGuards} from '@nestjs/common'
 import {ILdapProvider} from '@qiwi/ldap-common'
 import {Reflector} from '@nestjs/core'
+
 export const LDAP_PROVIDER = Symbol('ldap provider IoC ref')
 
 @Injectable()
