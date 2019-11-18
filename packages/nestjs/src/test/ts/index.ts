@@ -1,9 +1,9 @@
 import {NestApplication} from '@nestjs/core'
-import {Controller, Get, UseGuards, HttpStatus} from '@nestjs/common'
+import {Controller, Get, HttpStatus} from '@nestjs/common'
 import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
 import {SessionLdapProvider} from '@qiwi/ldap-common'
-import {LdapGuard, LdapRoles, LDAP_PROVIDER} from '../../main/ts'
+import {LdapGuard, LdapRoles, LDAP_PROVIDER, UseLdapGuard} from '../../main/ts'
 import {testADProvider, testSessionProvider} from '../../test/stab/testLdap'
 
 describe('@qiwi/ldap-common', () => {
@@ -24,7 +24,7 @@ describe('@qiwi/ldap-common', () => {
     )
 
     @Controller('cats')
-    @UseGuards(LdapGuard)
+    @UseLdapGuard()
     class CustomController {
 
       @Get()
@@ -36,7 +36,7 @@ describe('@qiwi/ldap-common', () => {
     }
 
     @Controller('forbidden')
-    @UseGuards(LdapGuard)
+    @UseLdapGuard()
     class ForbiddenController {
 
       @Get()

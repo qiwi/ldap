@@ -1,4 +1,4 @@
-import {Injectable, Inject, CanActivate, ExecutionContext, SetMetadata} from '@nestjs/common'
+import {Injectable, Inject, CanActivate, ExecutionContext, SetMetadata, UseGuards} from '@nestjs/common'
 import {ILdapProvider} from '@qiwi/ldap-common'
 import {Reflector} from '@nestjs/core'
 export const LDAP_PROVIDER = Symbol('ldap provider IoC ref')
@@ -27,3 +27,4 @@ export class LdapGuard implements CanActivate {
 }
 
 export const LdapRoles = (...roles: string[]) => SetMetadata('roles', roles)
+export const UseLdapGuard = () => UseGuards(LdapGuard)

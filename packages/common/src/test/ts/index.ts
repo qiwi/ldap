@@ -8,7 +8,7 @@ describe('@qiwi/ldap-common', () => {
     })
   })
 
-  describe('methods works correctly', () => {
+  describe('ldap provider', () => {
     const testSessionProviderFactory = (): ISessionProvider => {
       const inMemoryStorage: {
         [key: string]: any
@@ -85,51 +85,59 @@ describe('@qiwi/ldap-common', () => {
       'test',
     )
 
-    it('checkCred', () => {
-      ldapProvider.checkCred('foo', 'bar')
-        .then(res => {
-          expect(res).toMatchObject({login: 'foo', result: true})
-        })
-        .catch(console.log)
+    // tslint:disable-next-line:no-empty
+    describe('constructor', () => {})
+
+    describe('proto', () => {
+      it('#checkCred', () => {
+        ldapProvider.checkCred('foo', 'bar')
+          .then(res => {
+            expect(res).toMatchObject({login: 'foo', result: true})
+          })
+          .catch(console.log)
+      })
+
+      it('#login', () => {
+        ldapProvider.login('foo', 'bar', 0)
+          .then(res => {
+            expect(res).toEqual('foobartoken')
+            expect(ldapProvider.getDataByToken(res)).toMatchObject({ldapData: 'foo groups', ttl: 100})
+          })
+          .catch(console.log)
+      })
+
+      it('#logout', () => {
+        ldapProvider
+          .login('foo', 'bar', 0)
+          .catch(console.log)
+        ldapProvider.logout('foobartoken')
+          .then((res) => {
+            expect(res).toEqual(true)
+            expect(ldapProvider.getDataByToken('foobartoken')).toEqual('invalid token')
+          })
+          .catch(console.log)
+      })
+
+      it('#findGroupByUser', () => {
+        ldapProvider.findGroupByUser('foo')
+          .then((res: any) => {
+            expect(res).toEqual('foo groups')
+          })
+          .catch(console.log)
+      })
+
+      it('#getDataByToken', async() => {
+        const token = await ldapProvider.login('foo', 'bar', 100)
+        expect(token).toEqual('foobartoken')
+        const ldapData = await ldapProvider.getDataByToken('foobartoken')
+        expect(ldapData).toMatchObject({ldapData: 'foo groups', ttl: 100})
+        await ldapProvider.logout(token)
+        const deleteLdapData = await ldapProvider.getDataByToken('foobartoken')
+        expect(deleteLdapData).toEqual('invalid token')
+      })
     })
 
-    it('login', () => {
-      ldapProvider.login('foo', 'bar', 0)
-        .then(res => {
-          expect(res).toEqual('foobartoken')
-          expect(ldapProvider.getDataByToken(res)).toMatchObject({ldapData: 'foo groups', ttl: 100})
-        })
-        .catch(console.log)
-    })
-
-    it('logout', () => {
-      ldapProvider
-        .login('foo', 'bar', 0)
-        .catch(console.log)
-      ldapProvider.logout('foobartoken')
-        .then((res) => {
-          expect(res).toEqual(true)
-          expect(ldapProvider.getDataByToken('foobartoken')).toEqual('invalid token')
-        })
-        .catch(console.log)
-    })
-
-    it('findGroupByUser', () => {
-      ldapProvider.findGroupByUser('foo')
-        .then((res: any) => {
-          expect(res).toEqual('foo groups')
-        })
-        .catch(console.log)
-    })
-
-    it('getDataByToken', async() => {
-      const token = await ldapProvider.login('foo', 'bar', 100)
-      expect(token).toEqual('foobartoken')
-      const ldapData = await ldapProvider.getDataByToken('foobartoken')
-      expect(ldapData).toMatchObject({ldapData: 'foo groups', ttl: 100})
-      await ldapProvider.logout(token)
-      const deleteLdapData = await ldapProvider.getDataByToken('foobartoken')
-      expect(deleteLdapData).toEqual('invalid token')
-    })
+    // tslint:disable-next-line:no-empty
+    describe('static', () => {})
   })
 })
