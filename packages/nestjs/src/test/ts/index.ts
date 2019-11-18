@@ -4,7 +4,7 @@ import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
 import {SessionLdapProvider} from '@qiwi/ldap-common'
 import {LdapGuard, LdapRoles, LDAP_PROVIDER} from '../../main/ts'
-import {testADProvider, testSessionProvider} from '../../main/ts/testLdap'
+import {testADProvider, testSessionProvider} from '../../test/stab/testLdap'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
@@ -17,7 +17,7 @@ describe('@qiwi/ldap-common', () => {
     let module: TestingModule
     let app: NestApplication
 
-    const ldapProvider = new SessionLdapProvider(
+    const testLdapProvider = new SessionLdapProvider(
       testADProvider,
       testSessionProvider,
       'test',
@@ -51,7 +51,7 @@ describe('@qiwi/ldap-common', () => {
       module = await Test.createTestingModule({
         providers: [{
           provide: LDAP_PROVIDER,
-          useValue: ldapProvider,
+          useValue: testLdapProvider,
         }],
         controllers: [CustomController, ForbiddenController],
       }).compile()

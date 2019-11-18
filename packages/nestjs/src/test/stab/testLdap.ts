@@ -1,18 +1,4 @@
-import {ldapClientFactory, ISessionProvider} from '@qiwi/ldap-common'
-
-export const activeDirectoryConfig = {
-  'instanceConfig': {
-    url: 'ldaps://hq.test.com/',
-    baseDN: 'DC=test',
-    username: 'user',
-    password: 'pass',
-    tlsOptions: {
-      rejectUnauthorized: false,
-    },
-  },
-  'groups': [],
-  'userPostfix': '@hq.test.com',
-}
+import {ISessionProvider} from '@qiwi/ldap-common'
 
 export const testSessionProviderFactory = (): ISessionProvider => {
   const inMemoryStorage: {
@@ -87,9 +73,3 @@ export const testADProvider = {
   },
   authenticate: (_: string, __: string, cb: (_: null, res: boolean) => void) => cb(null, true),
 }
-
-export const ldapClient = ldapClientFactory({
-  sessionProvider: testSessionProvider,
-  ldapConfig: activeDirectoryConfig,
-  ldapProvider: testADProvider,
-})

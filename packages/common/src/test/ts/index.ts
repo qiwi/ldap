@@ -1,10 +1,10 @@
-import {ldapClientFactory, SessionLdapProvider} from '../../main/ts'
+import {SessionLdapProvider} from '../../main/ts'
 import {ISessionProvider} from '../../../target/es5'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
     it('properly exposes its inners', () => {
-      expect(ldapClientFactory).toBeTruthy()
+      expect(SessionLdapProvider).toBeTruthy()
     })
   })
 

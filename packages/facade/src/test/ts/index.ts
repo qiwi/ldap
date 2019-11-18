@@ -1,9 +1,9 @@
-import {ldapClientFactory, LdapGuard} from '../../main/ts'
+import {SessionLdapProvider, LdapGuard} from '../../main/ts'
 
 describe('@qiwi/ldap-common', () => {
   describe('index', () => {
     it('properly exposes its inners', () => {
-      expect(ldapClientFactory).not.toBeUndefined()
+      expect(SessionLdapProvider).not.toBeUndefined()
       expect(LdapGuard).not.toBeUndefined()
     })
   })

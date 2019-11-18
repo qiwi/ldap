@@ -57,25 +57,3 @@ export class SessionLdapProvider implements ILdapProvider{
   }
 
 }
-//
-// export class KeycloakLdapProvider implements ILdapProvider{
-//   constructor(
-//     private readonly ldapService: ILdapService,
-//     private readonly keycloakService: any,
-//   ) {}
-//
-//   login(username: string, password: string) {}
-//   logout(token: IToken) {}
-//   getDataByToken(token: IToken) {}
-// }
-//
-// export class CommonAuthLdapProvider implements ILdapProvider{
-//   constructor(
-//     private readonly ldapService: ILdapService,
-//     private readonly commonAuthProvider: any,
-//   ) {}
-//
-//   login(username: string, password: string) {}
-//   logout(token: IToken) {}
-//   getDataByToken(token: IToken) {}
-// }
