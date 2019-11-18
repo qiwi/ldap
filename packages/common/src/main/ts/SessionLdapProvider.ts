@@ -25,7 +25,7 @@ export class SessionLdapProvider implements ILdapProvider{
     return new Promise((resolve => {
       this.ldapService.getGroupMembershipForUser(username, (err: any, res: any) => {
         if (err) {
-          return false
+          return resolve(false)
         }
         resolve(res)
       })
