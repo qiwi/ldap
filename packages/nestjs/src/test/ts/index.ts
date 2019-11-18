@@ -65,7 +65,6 @@ describe('@qiwi/ldap-common', () => {
           .get('/cats')
           .set({Authorization: 'token1'})
           .expect('This action returns all cats')
-
       })
 
       it('should return 403 status', async() => {

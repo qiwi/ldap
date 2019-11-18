@@ -54,7 +54,7 @@ describe('@qiwi/ldap-common', () => {
 
       function getDataByToken(token: string) {
         if (!inMemoryStorage[token]) {
-          return 'invalid token'
+          return false
         }
 
         return inMemoryStorage[token]
@@ -72,10 +72,20 @@ describe('@qiwi/ldap-common', () => {
 
     const testADProvider = {
       findUser: (username: string, cb: (_: null, res: string) => void) => cb(null, username + ' found'),
-      getGroupMembershipForUser: (username: string, cb: (_: null, res: string) => void) => {
+      getGroupMembershipForUser: (username: string, cb: (_: any, res?: string) => void) => {
+        if (username === 'test') {
+          return cb('invalid user')
+        }
         return cb(null, username + ' groups')
       },
-      authenticate: (_: string, __: string, cb: (_: null, res: boolean) => void) => cb(null, true),
+      authenticate: (_: string, pass: string, cb: (err: any, res?: boolean) => void) => {
+        if (pass === 'bar') {
+          cb(null, true)
+        }
+        else {
+          cb('invalid password', false)
+        }
+      },
     }
 
     const ldapProvider = new SessionLdapProvider(
@@ -88,51 +98,103 @@ describe('@qiwi/ldap-common', () => {
     describe('constructor', () => {})
 
     describe('proto', () => {
-      it('#checkCred', () => {
-        ldapProvider.checkCred('foo', 'bar')
-          .then(res => {
-            expect(res).toMatchObject({login: 'foo', result: true})
-          })
-          .catch(console.log)
+      describe('#checkCred', () => {
+        it('succeeds on valid creds', async() => {
+          return ldapProvider.checkCred('foo', 'bar')
+            .then(res => {
+              expect(res).toMatchObject({login: 'foo', result: true})
+            })
+            .catch(console.log)
+        })
+
+        it('return `invalid password` otherwise', async() => {
+          return ldapProvider.checkCred('foo', 'baz')
+            .then(res => {
+              expect(res).toBe(false)
+            })
+            .catch(console.log)
+        })
+
       })
 
-      it('#login', () => {
-        ldapProvider.login('foo', 'bar', 0)
-          .then(res => {
-            expect(res).toEqual('foobartoken')
-            expect(ldapProvider.getDataByToken(res)).toMatchObject({ldapData: 'foo groups', ttl: 100})
-          })
-          .catch(console.log)
+      describe('#login', () => {
+        it('succeed on valid creds',() => {
+          return ldapProvider.login('foo', 'bar', 0)
+            .then(res => {
+              expect(res).toBe('foobartoken')
+              return res
+            })
+            .then(res => ldapProvider.getDataByToken(res))
+            .then(res => expect(res).toMatchObject({ldapData: 'foo groups', ttl: 100}),
+            )
+            .catch(console.log)
+        })
+
+        it('return `cannot login` otherwise',async() => {
+          return ldapProvider.login('foo', 'baz', 0)
+            .then(res => {
+              expect(res).toBe('cannot login')
+            })
+            .catch(console.log)
+        })
       })
 
-      it('#logout', () => {
-        ldapProvider
-          .login('foo', 'bar', 0)
-          .catch(console.log)
-        ldapProvider.logout('foobartoken')
-          .then((res) => {
-            expect(res).toEqual(true)
-            expect(ldapProvider.getDataByToken('foobartoken')).toEqual('invalid token')
-          })
-          .catch(console.log)
+      describe('#logout', () => {
+        it('succeed logout on valid token', async() => {
+          ldapProvider
+            .login('foo', 'bar', 0)
+            .catch(console.log)
+
+          return ldapProvider.logout('foobartoken')
+            .then((res) => {
+              expect(res).toEqual(true)
+              return res
+            })
+            .then(() => ldapProvider.getDataByToken('foobartoken'))
+            .then(res => expect(res).toEqual(false))
+            .catch(console.log)
+        })
+
+        it('return false on invalid token', async() => {
+          return ldapProvider.logout('foobarinvalidtoken')
+            .then((res: boolean) => expect(res).toBe(false))
+        })
       })
 
-      it('#findGroupByUser', () => {
-        ldapProvider.findGroupByUser('foo')
-          .then((res: any) => {
-            expect(res).toEqual('foo groups')
-          })
-          .catch(console.log)
+      describe('#findGroupByUser', () => {
+        it('succeed found group on valid user', async() => {
+          ldapProvider.findGroupByUser('foo')
+            .then((res: any) => {
+              expect(res).toEqual('foo groups')
+            })
+            .catch(console.log)
+        })
+
+        it('return test on invalid user', async() => {
+          ldapProvider.findGroupByUser('test')
+            .then((res: any) => {
+              expect(res).toEqual(false)
+            })
+            .catch(console.log)
+        })
+
       })
 
-      it('#getDataByToken', async() => {
-        const token = await ldapProvider.login('foo', 'bar', 100)
-        expect(token).toEqual('foobartoken')
-        const ldapData = await ldapProvider.getDataByToken('foobartoken')
-        expect(ldapData).toMatchObject({ldapData: 'foo groups', ttl: 100})
-        await ldapProvider.logout(token)
-        const deleteLdapData = await ldapProvider.getDataByToken('foobartoken')
-        expect(deleteLdapData).toEqual('invalid token')
+      describe('#getDataByToken', () => {
+        it('works correctly on valid token', async() => {
+          const token = await ldapProvider.login('foo', 'bar', 100)
+          expect(token).toEqual('foobartoken')
+          const ldapData = await ldapProvider.getDataByToken('foobartoken')
+          expect(ldapData).toMatchObject({ldapData: 'foo groups', ttl: 100})
+          await ldapProvider.logout(token)
+          const deleteLdapData = await ldapProvider.getDataByToken('foobartoken')
+          expect(deleteLdapData).toEqual(false)
+        })
+
+        it('return false on invalid token', async() => {
+          const ldapData = await ldapProvider.getDataByToken('invalidtoken')
+          expect(ldapData).toBe(false)
+        })
       })
     })
 

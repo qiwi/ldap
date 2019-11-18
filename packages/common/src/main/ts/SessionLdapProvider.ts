@@ -12,12 +12,8 @@ export class SessionLdapProvider implements ILdapProvider{
     const fullUserName = login + this.userPostfix
     return new Promise(resolve => {
       this.ldapService.authenticate(fullUserName, password, (err: any, result: any) => {
-        if (err) {
-          resolve({reasonText: err})
-        }
-
-        if (!result) {
-          resolve({reasonText: 'Unauthenticated'})
+        if (err || !result) {
+          return resolve(false)
         }
 
         return resolve({login, result})
@@ -27,7 +23,10 @@ export class SessionLdapProvider implements ILdapProvider{
 
   findGroupByUser(username: string): any {
     return new Promise((resolve => {
-      this.ldapService.getGroupMembershipForUser(username, (_: any, res: any) => {
+      this.ldapService.getGroupMembershipForUser(username, (err: any, res: any) => {
+        if (err) {
+          return false
+        }
         resolve(res)
       })
     }))
