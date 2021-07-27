@@ -58,19 +58,19 @@ describe('nestjs-ldap-auth', () => {
         await request(app.getHttpServer())
           .get('/public')
           .set({Authorization: 'tokenAdmin'})
-          .expect(['baz', 'qux'])
+          .expect(200, ['baz', 'qux'])
 
         await request(app.getHttpServer())
           .get('/private')
           .set({Authorization: 'tokenAdmin'})
-          .expect(['foo', 'bar'])
+          .expect(200, ['foo', 'bar'])
       })
 
       it('User should have access to public route only', async() => {
         await request(app.getHttpServer())
           .get('/public')
           .set({Authorization: 'tokenUser'})
-          .expect(['baz', 'qux'])
+          .expect(200, ['baz', 'qux'])
 
         await request(app.getHttpServer())
           .get('/private')
