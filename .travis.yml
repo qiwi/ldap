@@ -1,34 +1,63 @@
-dist: xenial
 language: node_js
-node_js:
-  - '12'
+node_js: 16
+install: skip
+cache: yarn
+dist: focal
 
-cache:
-  directories:
-    - node_modules
+jobs:
+  fast_finish: true
+  include:
+    - stage: verify
+      if: branch != master AND type != pull_request
+      os: linux
+      install:
+        - yarn
+        - yarn bootstrap
+      script:
+        - yarn lint
 
-before_install:
-  - npm install -g yarn
+    - &build
+      if: branch = master
+      os: linux
+      stage: build
+      install:
+        - yarn
+        - yarn bootstrap
+      script:
+        - yarn build
+      # https://docs.travis-ci.com/user/using-workspaces/
+      workspaces:
+        create:
+          name: linux-shared
+          paths:
+            - node_modules
+            - packages
 
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+    - &test
+      if: branch = master AND type = pull_request
+      stage: test
+      os: linux
+      script: yarn test
+      workspaces:
+        use: linux-shared
 
-after_script:
-  - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+    - <<: *test
+      node_js: 14
 
-install:
-  - sh scripts/sh/install.sh
-  - yarn run bootstrap
-  - yarn run build
+    - <<: *test
+      if: branch = master AND type != pull_request
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      script: yarn test:report
+      after_script:
+        - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-script:
-  - yarn test:report
-
-deploy:
-  provider: script
-  skip_cleanup: true
-  script:
-    - yarn release
+    - stage: release
+      if: branch = master AND type != pull_request AND env(CI_RELEASE) = true
+      workspaces:
+        use: linux-shared
+      script: npx -p @qiwi/semrel-toolkit multi-semrel
+      # script: echo 'Deploy step is disabled' && exit 0
