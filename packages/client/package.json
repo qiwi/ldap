@@ -1,0 +1,32 @@
+{
+  "name": "@qiwi/ldap-client",
+  "version": "0.0.0",
+  "description": "Promisified ldapjs client",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [],
+  "scripts": {
+    "build": "exit 0",
+    "test": "exit 0",
+    "lint": "exit 0"
+  },
+  "dependencies": {
+    "ldapjs": ""
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiwi/ldap.git"
+  },
+  "keywords": [],
+  "author": "Anton Golub <mailbox@antongolub.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qiwi/ldap/issues"
+  },
+  "homepage": "https://github.com/qiwi/ldap#readme",
+  "peerDependencies": {},
+  "optionalDependencies": {}
+}
