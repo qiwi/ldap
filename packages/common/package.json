@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/ldap-common",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "LDAP / AD common assets",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
