@@ -6,7 +6,7 @@ import {SessionLdapProvider} from '@qiwi/ldap-common'
 import {LdapGuard, LdapRoles, LDAP_PROVIDER, UseLdapGuard} from '../../main/ts'
 import {testADProvider, testSessionProvider} from '../../test/stub/testLdap'
 
-describe('@qiwi/ldap-common', () => {
+describe('nestjs-ldap-auth', () => {
   describe('index', () => {
     it('properly exposes its inners', () => {
       expect(LdapGuard).not.toBeUndefined()
