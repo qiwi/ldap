@@ -1,3 +1,19 @@
+## @qiwi/ldap [1.0.1](https://github.com/qiwi/ldap/compare/@qiwi/ldap@1.0.0...@qiwi/ldap@1.0.1) (2021-07-28)
+
+
+### Performance Improvements
+
+* deps revision ([da9780d](https://github.com/qiwi/ldap/commit/da9780d8404897a40a9536989ff51e8001eb31b1))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/ldap-common:** upgraded to 1.0.1
+* **@qiwi/ldap-infra:** upgraded to 1.0.1
+
 # @qiwi/ldap 1.0.0 (2021-07-27)
 
 

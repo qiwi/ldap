@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/ldap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LDAP / AD helpers",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@qiwi/substrate": "^1.20.9",
-    "@qiwi/ldap-common": "1.0.0",
+    "@qiwi/ldap-common": "1.0.1",
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.171",
     "reflect-metadata": "^0.1.13",
@@ -46,7 +46,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@qiwi/ldap-infra": "^1.0.0"
+    "@qiwi/ldap-infra": "1.0.1"
   },
   "repository": {
     "type": "git",
