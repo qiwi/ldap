@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@types/ldapjs": "^2.2.0",
-    "ldapjs-promise": "1.0.5"
+    "ldapjs-promise": "1.0.6"
   },
   "devDependencies": {
     "@qiwi/ldap-infra": "^1.0.0"

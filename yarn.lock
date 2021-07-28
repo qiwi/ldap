@@ -6622,15 +6622,16 @@ ldap-filter@^0.3.3:
   dependencies:
     assert-plus "^1.0.0"
 
-ldapjs-promise@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/ldapjs-promise/-/ldapjs-promise-1.0.5.tgz#9c21aa0e7d958aec018fcaf60bfabdd949019b38"
-  integrity sha512-ptq254zR5uI5lhOWIaE/NNWDCwhe/5r0ApsNY8UEH7OqNrY6VCKiP4662x8xRCL8fs5kF8y+UjypuaRMQQfkCA==
+ldapjs-promise@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/ldapjs-promise/-/ldapjs-promise-1.0.6.tgz#6a6a7f087466ddfbaf52c9be1f6d2edd03212de9"
+  integrity sha512-usyzflG5TiLJ3DFvigOrVPxl6DLlYVM89o78qJDS12yIvSlqrplab6kSN+P6LlCuwdYewveGCe22d+Ms9FeTWg==
   dependencies:
+    "@types/ldapjs" "^2.2.0"
     abstract-logging "^2.0.1"
-    ldapjs "^2.2.4"
+    ldapjs "^2.3.0"
 
-"ldapjs@>= 0.7.1", ldapjs@^2.2.4:
+"ldapjs@>= 0.7.1", ldapjs@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/ldapjs/-/ldapjs-2.3.0.tgz#999c85f642216709009dc8728e58ac7793888def"
   integrity sha512-3Rbm3CS7vzTccpP1QnzKCEPok60L/b3BFlWU8r93P5oadCAaqCWEH9Td08crPnw4Ti20W8y0+ZKtFFNzxVu4kA==
