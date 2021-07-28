@@ -6,16 +6,45 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [],
+  "main": "target/es5/index.js",
+  "source": "target/ts/index.ts",
+  "types": "typings/index.d.ts",
+  "typescript": {
+    "definition": "typings/index.d.ts"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "target",
+    "typings",
+    "customTypings",
+    "flow-typed"
+  ],
   "scripts": {
-    "build": "exit 0",
-    "test": "exit 0",
-    "lint": "exit 0"
+    "test": "yarn lint && yarn test:spec",
+    "test:gen": "yarn jest --updateSnapshot",
+    "test:spec": "yarn jest",
+    "jest": "jest -w=1 --config=jest.config.json",
+    "lint": "tslint -p tsconfig.test.json src/**/*.ts",
+    "lint:fix": "yarn lint --fix",
+    "clean": "rimraf target typings buildcache",
+    "build": "yarn build:es5 && yarn build:es6 && yarn build:ts && yarn build:libdef && yarn docs && yarn uglify",
+    "build:es5": "mkdir -p target/es5 && tsc -p tsconfig.es5.json",
+    "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json",
+    "build:ts": "cp -r src/main/ts/ target/ts/",
+    "build:bundle": "microbundle build src/main/ts/index.ts -o target/bundle",
+    "build:libdef": "libdefkit --tsconfig=tsconfig.es5.json --tsconfig=tsconfig.es6.json --customTypings=customTypings/**/*.d.ts",
+    "docs": "typedoc",
+    "uglify": "for f in $(find target -name '*.js'); do short=${f%.js}; terser -c -m -o $short.js -- $f; done",
+    "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "ldapjs": ""
+    "@types/ldapjs": "^2.2.0",
+    "ldapjs-promise": "1.0.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@qiwi/ldap-infra": "^1.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qiwi/ldap.git"
