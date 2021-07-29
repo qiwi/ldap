@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-ldap-auth",
+  "name": "@qiwi/nestjs-ldap-auth",
   "out": "./docs",
   "entryPoints": ["src/main"],
   "exclude": ["src/test", "**/node_modules/**", "paralleljs"],

@@ -1,4 +1,4 @@
-# nestjs-ldap-auth
+# @qiwi/nestjs-ldap-auth
 Nestjs LDAP / AD auth helpers
 
 ## Install
@@ -11,7 +11,7 @@ npm add nestjs-ldap-auth
 ```typescript
 import {
   HasLdapGroup
-} from 'nestjs-ldap-auth'
+} from '@qiwi/nestjs-ldap-auth'
 
 @Controller()
 export class SomeController {
