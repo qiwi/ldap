@@ -43,7 +43,7 @@
     "ldapjs-promise": "1.0.6"
   },
   "devDependencies": {
-    "@qiwi/ldap-infra": "^1.0.0"
+    "@qiwi/ldap-infra": "^1.0.1"
   },
   "repository": {
     "type": "git",

@@ -1,2 +1,2 @@
 export * from '@qiwi/ldap-common'
-export * from 'nestjs-ldap-auth'
+export * from '@qiwi/nestjs-ldap-auth'

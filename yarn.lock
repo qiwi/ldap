@@ -2252,10 +2252,10 @@
     glob "^7.1.6"
     mkdirp "^1.0.4"
 
-"@qiwi/ldap-infra@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@qiwi/ldap-infra/-/ldap-infra-1.0.0.tgz#f5a4b7244c80ad325f0d646621433378f9ebeb53"
-  integrity sha512-PMH18sB5nZ06ITWbzSwXWjumNdZJeY6sH4wTkh5buc889WHSeVkaSvqKOufpu5PthMdeNGBWhjXh2AbNNoOJYg==
+"@qiwi/ldap-infra@1.0.1", "@qiwi/ldap-infra@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@qiwi/ldap-infra/-/ldap-infra-1.0.1.tgz#7ba1c084c1d7dd599f3daaf121b6a4a1d38144f4"
+  integrity sha512-TY85F1WopU+QlS1kNX8/md/2U/uXup+/UO4Yx38gn/WI1nFQvl8P/gP99/gMT50NVpNlmPMuSLTJZifRIIUKXQ==
 
 "@qiwi/libdefkit@^3.1.1":
   version "3.1.1"
@@ -9286,10 +9286,10 @@ rxjs@^6.6.0:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.2.0.tgz#5cd12409639e9514a71c9f5f9192b2c4ae94de31"
-  integrity sha512-aX8w9OpKrQmiPKfT1bqETtUr9JygIz6GZ+gql8v7CijClsP0laoFUdKzxFAoWuRdSlOdU2+crss+cMf+cqMTnw==
+rxjs@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.3.0.tgz#39fe4f3461dc1e50be1475b2b85a0a88c1e938c6"
+  integrity sha512-p2yuGIg9S1epc3vrjKf6iVb3RCaAYjYskkO+jHIaV0IjOPlJop4UnodOoFb2xeNwlguqLYvGw1b1McillYb5Gw==
   dependencies:
     tslib "~2.1.0"
 

@@ -1,7 +1,7 @@
 {
-  "name": "nestjs-ldap-auth",
-  "version": "1.0.1",
-  "description": "Nestjs LDAP decorators",
+  "name": "@qiwi/nestjs-ldap-auth",
+  "version": "1.0.0",
+  "description": "Nestjs LDAP auth decorators",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
   "types": "target/es5/index.d.ts",
@@ -46,7 +46,7 @@
     "reflect-metadata": "^0.1.13",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "rxjs": "^7.2.0",
+    "rxjs": "^7.3.0",
     "tslib": "^2.3.0",
     "lodash": "^4.17.21"
   },

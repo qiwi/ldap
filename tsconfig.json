@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
-      "nestjs-ldap-auth": ["./nestjs/src/main/ts"],
+      "@qiwi/ldap-client": ["./client/src/main/ts"],
+      "@qiwi/nestjs-ldap-auth": ["./nestjs/src/main/ts"],
       "@qiwi/ldap": ["./facade/src/main/ts"],
       "@qiwi/ldap-common": ["./common/src/main/ts"]
     }
