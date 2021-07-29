@@ -40,7 +40,7 @@
     "@nestjs/common": "^8.0.5",
     "@nestjs/core": "^8.0.5",
     "@qiwi/substrate": "^1.20.9",
-    "@qiwi/ldap-common": "1.0.1",
+    "@qiwi/ldap-common": "1.1.0",
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.171",
     "reflect-metadata": "^0.1.13",
