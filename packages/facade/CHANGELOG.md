@@ -1,3 +1,18 @@
+# @qiwi/ldap [1.1.0](https://github.com/qiwi/ldap/compare/@qiwi/ldap@1.0.1...@qiwi/ldap@1.1.0) (2021-07-29)
+
+
+### Features
+
+* rename nest pkg ([8d9ac27](https://github.com/qiwi/ldap/commit/8d9ac27ba5b0d3819da064463e5b399caf08d264))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/ldap-common:** upgraded to 1.1.0
+
 ## @qiwi/ldap [1.0.1](https://github.com/qiwi/ldap/compare/@qiwi/ldap@1.0.0...@qiwi/ldap@1.0.1) (2021-07-28)
 
 
