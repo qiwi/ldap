@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/ldap-common",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "LDAP / AD common assets",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -47,7 +47,7 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@qiwi/ldap-infra": "1.0.1",
+    "@qiwi/ldap-infra": "1.0.2",
     "@types/jest": "^27.4.0",
     "@types/jest-json-schema": "^6.1.0",
     "reqresnext": "^1.7.0",

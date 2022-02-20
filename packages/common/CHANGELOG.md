@@ -1,3 +1,18 @@
+## @qiwi/ldap-common [1.1.1](https://github.com/qiwi/ldap/compare/@qiwi/ldap-common@1.1.0...@qiwi/ldap-common@1.1.1) (2022-02-20)
+
+
+### Bug Fixes
+
+* up deps, fix some vuls ([64184d8](https://github.com/qiwi/ldap/commit/64184d8b77ede3edc1858d33c73b8ff4b018d412))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/ldap-infra:** upgraded to 1.0.2
+
 # @qiwi/ldap-common [1.1.0](https://github.com/qiwi/ldap/compare/@qiwi/ldap-common@1.0.1...@qiwi/ldap-common@1.1.0) (2021-07-29)
 
 
