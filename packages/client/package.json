@@ -39,7 +39,7 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "@types/ldapjs": "^2.2.0",
+    "@types/ldapjs": "^2.2.2",
     "ldapjs-promise": "1.0.6"
   },
   "devDependencies": {
