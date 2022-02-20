@@ -9,7 +9,7 @@
     "lint": "lerna run lint",
     "clean": "lerna clean --yes && lerna run clean",
     "prebuild": "tsc -b packages/facade/tsconfig.es5.json",
-    "build": "yarn clean && yarn prebuild && lerna run build --stream --concurrency 2",
+    "build": "yarn prebuild && lerna run build --stream --concurrency 2",
     "bootstrap": "lerna bootstrap",
     "jest": "jest",
     "test:report": "yarn test && yarn coveralls:push",
