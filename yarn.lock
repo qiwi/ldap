@@ -2354,7 +2354,12 @@
     glob "^7.1.6"
     mkdirp "^1.0.4"
 
-"@qiwi/ldap-infra@1.0.1", "@qiwi/ldap-infra@^1.0.1":
+"@qiwi/ldap-infra@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@qiwi/ldap-infra/-/ldap-infra-1.0.2.tgz#965d59ef59daa5cd8bc851094287fe1aba9ad9d7"
+  integrity sha512-pp30Boy+AtshLzWmYwnLqIpvvB3+6uQ8QWWEn/sywl3+YDHUeIerCXMooQ/oxqkg6OKkQV34zCvhz1fs+O0G0g==
+
+"@qiwi/ldap-infra@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@qiwi/ldap-infra/-/ldap-infra-1.0.1.tgz#7ba1c084c1d7dd599f3daaf121b6a4a1d38144f4"
   integrity sha512-TY85F1WopU+QlS1kNX8/md/2U/uXup+/UO4Yx38gn/WI1nFQvl8P/gP99/gMT50NVpNlmPMuSLTJZifRIIUKXQ==
@@ -7236,9 +7241,9 @@ modify-values@^1.0.0:
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
 moment@^2.19.3:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+  version "2.29.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.2.tgz#00910c60b20843bcba52d37d58c628b47b1f20e4"
+  integrity sha512-UgzG4rvxYpN15jgCmVJwac49h9ly9NurikMWGPdVxm8GZD6XjkKPxDTjQQ43gtGgnV3X0cAyWDdP2Wexoquifg==
 
 mri@^1.1.0:
   version "1.1.6"
