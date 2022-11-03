@@ -1,14 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../packages/infra/tsconfig.compiler.json",
   "compilerOptions": {
     "rootDir": "./src/main/ts/",
     "baseUrl": "./src/main/ts/",
     "target": "es5",
     "outDir": "target/es5",
-    "tsBuildInfoFile": "./buildcache/.tsbuildinfo",
-    "typeRoots": [ "./customTypings", "./node_modules/@types", "../../node_modules/@types"]
+    "tsBuildInfoFile": "./buildcache/.tsbuildinfo"
   },
-  "references": [],
   "include": [
     "src/main/**/*"
   ],

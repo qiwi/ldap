@@ -65,6 +65,17 @@ buildcache
 .rts2_cache_es
 .rts2_cache_umd
 
+# Yarn berry
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.npmrc
+
 # Creds
 *.asc
 *.key

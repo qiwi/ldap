@@ -1,12 +1,13 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": "./packages",
-    "paths": {
-      "@qiwi/ldap-client": ["./client/src/main/ts"],
-      "@qiwi/nestjs-ldap-auth": ["./nestjs/src/main/ts"],
-      "@qiwi/ldap": ["./facade/src/main/ts"],
-      "@qiwi/ldap-common": ["./common/src/main/ts"]
-    }
-  }
+    "outDir": "temp/prebuild",
+    "emitDeclarationOnly": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "./packages/client/tsconfig.es5.json" },
+    { "path": "./packages/common/tsconfig.es5.json" },
+    { "path": "./packages/facade/tsconfig.es5.json" },
+    { "path": "./packages/nestjs/tsconfig.es5.json" }
+  ]
 }
