@@ -40,25 +40,25 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "@nestjs/common": "^9.1.6",
-    "@nestjs/core": "^9.1.6",
+    "@nestjs/common": "^9.2.1",
+    "@nestjs/core": "^9.2.1",
     "@qiwi/ldap-common": "workspace:*",
-    "@qiwi/substrate": "^1.20.15",
+    "@qiwi/substrate": "^1.20.16",
     "@types/express": "^4.17.14",
-    "@types/lodash": "^4.14.187",
+    "@types/lodash": "^4.14.191",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.7",
+    "rxjs": "^7.6.0",
     "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@nestjs/platform-express": "^9.1.6",
-    "@nestjs/testing": "^9.1.6",
+    "@nestjs/platform-express": "^9.2.1",
+    "@nestjs/testing": "^9.2.1",
     "@qiwi/ldap-infra": "workspace:*",
     "@types/supertest": "^2.0.12",
-    "supertest": "^6.3.1"
+    "supertest": "^6.3.2"
   },
   "repository": {
     "type": "git",

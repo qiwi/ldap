@@ -40,19 +40,19 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "@qiwi/substrate": "^1.20.15",
+    "@qiwi/substrate": "^1.20.16",
     "@types/express": "^4.17.14",
-    "@types/lodash": "^4.14.187",
+    "@types/lodash": "^4.14.191",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.7",
+    "rxjs": "^7.6.0",
     "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@nestjs/testing": "^9.1.6",
+    "@nestjs/testing": "^9.2.1",
     "@qiwi/ldap-infra": "workspace:*",
-    "@types/jest": "^29.2.1",
+    "@types/jest": "^29.2.4",
     "@types/jest-json-schema": "^6.1.1",
     "activedirectory": "^0.7.2",
     "ldap-escape": "^2.0.6",
