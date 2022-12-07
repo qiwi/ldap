@@ -9685,9 +9685,9 @@ __metadata:
   linkType: hard
 
 "moment@npm:^2.19.3":
-  version: 2.29.2
-  resolution: "moment@npm:2.29.2"
-  checksum: eb1b6537a71bb0265701644b309688d748aa9c1eca9725eb11c3dfafe832e7475a685e6b982a994f58a0e8ea7572621c9ec0cf883811f8397954579ff4d20883
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: d275537a30f155cae7f53f6e6d164ccb59b560935f3c6ed0f4a2e6f3503063b491ffa6b4f7e7207501f6fcab92a2d0bb78ed539cde33cadcb91df6b254f7328d
   languageName: node
   linkType: hard
 
