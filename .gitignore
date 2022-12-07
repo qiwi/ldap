@@ -15,7 +15,14 @@ pids
 flow-coverage
 lib-cov
 coverage
+coverage.*
 .nyc_output
+*.lcov
+
+# Codeclimate
+codeclimate.*
+cc-reporter
+cc-reporter.*
 
 # Bundle
 build
@@ -57,3 +64,9 @@ buildcache
 .rts2_cache_cjs
 .rts2_cache_es
 .rts2_cache_umd
+
+# Creds
+*.asc
+*.key
+*.pem
+*.cert
