@@ -1,0 +1,12 @@
+{
+  "META_VERSION": "1",
+  "name": "@qiwi/nestjs-ldap-auth",
+  "hash": "2c354ae607c4f115a3b8991acec1eb95b3e2438b",
+  "version": "1.0.2",
+  "dependencies": {
+    "@qiwi/ldap-common": "1.1.2"
+  },
+  "devDependencies": {
+    "@qiwi/ldap-infra": "1.0.3"
+  }
+}
