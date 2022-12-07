@@ -5,6 +5,7 @@
   },
   "collectCoverage": true,
   "coveragePathIgnorePatterns": [
+    "stub/*"
   ],
   "collectCoverageFrom": [
     "<rootDir>/src/main/**/*.(j|t)s"
@@ -15,7 +16,7 @@
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",
-    "<rootDir>/src/test/ts/stub/*.ts"
+    "<rootDir>/src/test/stub/*"
   ],
   "moduleFileExtensions": [
     "ts",
