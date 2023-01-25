@@ -2106,7 +2106,7 @@ __metadata:
     "@types/lodash": "npm:^4.14.191"
     activedirectory: "npm:^0.7.2"
     class-transformer: "npm:^0.5.1"
-    class-validator: "npm:^0.13.2"
+    class-validator: "npm:^0.14.0"
     ldap-escape: "npm:^2.0.6"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.13"
@@ -2127,7 +2127,7 @@ __metadata:
     "@types/express": "npm:^4.17.14"
     "@types/lodash": "npm:^4.14.191"
     class-transformer: "npm:^0.5.1"
-    class-validator: "npm:^0.13.2"
+    class-validator: "npm:^0.14.0"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.13"
     rxjs: "npm:^7.6.0"
@@ -2227,7 +2227,7 @@ __metadata:
     "@types/lodash": "npm:^4.14.191"
     "@types/supertest": "npm:^2.0.12"
     class-transformer: "npm:^0.5.1"
-    class-validator: "npm:^0.13.2"
+    class-validator: "npm:^0.14.0"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.13"
     rxjs: "npm:^7.6.0"
@@ -2824,6 +2824,13 @@ __metadata:
   version: 4.0.2
   resolution: "@types/tough-cookie@npm:4.0.2"
   checksum: ecd7ef88c5c787be4ecb58481b5e13a1f190897506cbebdbf18ba0f8a12e39727fdf2c912bda8d5842fc3e072f803c9d14a73ab983202aa10e596e48687fd738
+  languageName: node
+  linkType: hard
+
+"@types/validator@npm:^13.7.10":
+  version: 13.7.10
+  resolution: "@types/validator@npm:13.7.10"
+  checksum: 369a33e8183a9eb5b18d2a0b2bd0ee36972a32b8b366484bb7bc4ada15691a5082baa1022f0ec3d85f24216d7af9819c414bec1f749217fa95f59b923e7af5a2
   languageName: node
   linkType: hard
 
@@ -3988,13 +3995,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"class-validator@npm:^0.13.2":
-  version: 0.13.2
-  resolution: "class-validator@npm:0.13.2"
+"class-validator@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "class-validator@npm:0.14.0"
   dependencies:
-    libphonenumber-js: "npm:^1.9.43"
+    "@types/validator": "npm:^13.7.10"
+    libphonenumber-js: "npm:^1.10.14"
     validator: "npm:^13.7.0"
-  checksum: 3b3c45bb9c84be5a621c23ecc1db70a844554d348b0d64229487e46b362fb945b885e60b65c2016f3f782f7e609c75919cb058ba3b264fb7ee8b30e654fa938f
+  checksum: 3bd7e3b93ee293b5cd456a52f7240accc69400234cc95985f38271c3f5ca44eb65d751d95d93a18f1bedd6373411b9909ee5c6d117cc6ca0fc77072c25880ccd
   languageName: node
   linkType: hard
 
@@ -7816,10 +7824,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libphonenumber-js@npm:^1.9.43":
-  version: 1.10.14
-  resolution: "libphonenumber-js@npm:1.10.14"
-  checksum: 2f1b36fd6f8a086211ed83d605d5c1c73fcf4750156031dc745d7b6b0ff6aecda04e72dfd7ab97ec143c7c6f2a587752f05ea58fd6b0f3ed675eedb970f17135
+"libphonenumber-js@npm:^1.10.14":
+  version: 1.10.18
+  resolution: "libphonenumber-js@npm:1.10.18"
+  checksum: 03f916516301f91abdeb94a69b4345d78c70d262bb42c2f08a76c3d5ca4de1673500a755836e7e9fc3433394ed66ea8ac9e17f9ead10eed2fabbe2769d230986
   languageName: node
   linkType: hard
 
